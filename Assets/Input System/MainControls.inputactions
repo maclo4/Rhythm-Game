@@ -1,0 +1,112 @@
+{
+    "name": "MainControls",
+    "maps": [
+        {
+            "name": "Controller",
+            "id": "3e19ea14-6087-4292-ab39-b1b138db08d0",
+            "actions": [
+                {
+                    "name": "Left Stick",
+                    "type": "Value",
+                    "id": "97a5587a-09d2-404b-b505-9060d3c7c7ba",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Right Stick",
+                    "type": "Value",
+                    "id": "314c695a-ecee-4874-81ac-48c56a4de401",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Left Hit",
+                    "type": "Button",
+                    "id": "1155d7cb-b266-4d9f-b640-f42c4ce3212b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Right Hit",
+                    "type": "Button",
+                    "id": "65009825-6c5d-404a-970b-09e22ae674fd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "897ace1a-0819-46f2-8141-6e9c0110535e",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Stick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8836ace8-94eb-4429-9f28-e2dbbf5922b5",
+                    "path": "<Gamepad>/rightStick/",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right Stick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d72ef3f1-268b-4751-adf5-c4070709386c",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Hit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9da5e34f-7974-4997-b613-fd6e1efc6948",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Hit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e10aaebd-76b8-4a1a-a33d-0e917262bad2",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right Hit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "881821db-2923-416d-990b-ad924b724484",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right Hit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
