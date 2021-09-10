@@ -5,21 +5,22 @@ using UnityEngine.InputSystem;
 
 public class MenuInputHandler : MonoBehaviour
 {
-    public bool rightButtonStarted, leftButtonStarted, readyToStart, startButtonPressed;
-    private void Awake()
+    public static bool rightButtonStarted, leftButtonStarted, readyToStart, startButtonPressed;
+
+    private static void Awake()
     {
         readyToStart = false;
     }
-    public void RightBeatpressed(InputAction.CallbackContext context)
+    public static void RightBeatpressed(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.performed == true)
         {
-            // Debug.Log("button started");
+            Debug.Log("button started");
             rightButtonStarted = true;
         }
-        else if (context.duration >= 1)
+        else if (context.performed == false)
         {
-            //Debug.Log("button cancelled");
+            Debug.Log("button cancelled");
             rightButtonStarted = false;
         }
         else if (context.canceled)
@@ -27,16 +28,16 @@ public class MenuInputHandler : MonoBehaviour
             rightButtonStarted = false;
         }
     }
-    public void LeftBeatpressed(InputAction.CallbackContext context)
+    public static void LeftBeatpressed(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.performed == true)
         {
-            // Debug.Log("button started");
+            Debug.Log("button started");
             leftButtonStarted = true;
         }
-        else if (context.duration >= 1)
+        else if (context.performed == false)
         {
-            //Debug.Log("button cancelled");
+            Debug.Log("button cancelled");
             leftButtonStarted = false;
         }
         else if (context.canceled)
@@ -45,7 +46,7 @@ public class MenuInputHandler : MonoBehaviour
         }
     }
     // TODO: maybe delet
-    public void StartButtonPressed(InputAction.CallbackContext context)
+    public static void StartButtonPressed(InputAction.CallbackContext context)
     {
         if (readyToStart == true && context.performed == true)
         {

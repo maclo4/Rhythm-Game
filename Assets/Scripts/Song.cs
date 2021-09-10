@@ -16,14 +16,11 @@ public class Song : MonoBehaviour
     public float offset;
 
     public RingObject rings;
-    public int[] rings2 = new int[1000];
     //public NoteArray[] rings3 = new NoteArray[100];
 
     private float animationSpeed;
     //public Animator nineRing, threeRing, fourRing, sixRing, sevenRing, eightRing, tenRing, twelveRing, oneRing; 
     private int currNote = 0;
-    public Ring[] ring4 = new Ring[100];
-    public int[,] rings3 = new int[100,16];// = new int[100,16];
     private List<int> noteMap = new List<int>();
 
     //void OnGUI()
