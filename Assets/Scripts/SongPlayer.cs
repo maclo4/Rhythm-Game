@@ -50,12 +50,14 @@ public class SongPlayer : MonoBehaviour
         bps = song.bpm / 60d;
         metronome2.bpm = song.bpm;
         msPerBeat = song.bpm / 60d * 1000d;
-
+        
         animator.speed = (float) msPerBeat / 1000 * 4;
         Debug.Log("msPerBeat: " + msPerBeat + ", bpm: " + song.bpm + ", bps: " + bps + ", interval: " +
                   metronome.Interval);
+        song.LoadNotemap(_song.notemapPath);
     }
 
+    //TODO: this method can just be removed probably
     public void PlaySong()
     {
         metronome2.Initialize(song);

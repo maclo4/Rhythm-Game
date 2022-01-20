@@ -1,9 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+public enum Cursor { Left, Right, Neutral }
 
 public class Note : MonoBehaviour
 {
-    
-    public float x, y;
+    public readonly int noteDirection;
+    public readonly Cursor cursor;
+
+    public Note(int noteDirection, Cursor cursor)
+    {
+        this.noteDirection = noteDirection;
+        this.cursor = cursor;
+    }
 }
