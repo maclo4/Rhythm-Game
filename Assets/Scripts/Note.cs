@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum Cursor { Left, Right, Neutral }
 
-public class Note : MonoBehaviour
+public class Note
 {
     public readonly int noteDirection;
     public readonly Cursor cursor;

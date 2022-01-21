@@ -48,7 +48,11 @@ public class Song : MonoBehaviour
                 var noteDirection = Convert.ToChar(sr.Read());
                 if (noteDirection == ' ' || noteDirection == '\n' || noteDirection == '\r') continue;
 
-
+                if ((int) char.GetNumericValue(noteDirection) == 0)
+                {
+                    m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                    continue;
+                }
                 if (sr.Peek() < 0)
                 {
                     m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
@@ -59,31 +63,31 @@ public class Song : MonoBehaviour
                 if (cursorDirection == ' ' && cursorDirection == '\n' && cursorDirection == '\r') continue;
                 
                 switch (cursorDirection)
-                    {
-                        case 'L':
-                        case 'l':
-                            m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Left));
-                            break;
-                        case 'R':
-                        case 'r':
-                            m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Right));
-                            break;
-                        case 'N':
-                        case 'n':
+                {
+                    case 'L':
+                    case 'l':
+                        m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Left));
+                        break;
+                    case 'R':
+                    case 'r':
+                        m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Right));
+                        break;
+                    case 'N':
+                    case 'n':
+                        m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                        break;
+                    default:
+                        if (char.IsDigit(cursorDirection))
+                        {
                             m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
-                            break;
-                        default:
-                            if (char.IsDigit(cursorDirection))
-                            {
-                                m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
-                                m_NoteMap.Add(new Note((int)char.GetNumericValue(cursorDirection), Cursor.Neutral));
-                            }
-                            else
-                            {
-                                m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
-                            }
-                            break;
-                    }
+                            m_NoteMap.Add(new Note((int)char.GetNumericValue(cursorDirection), Cursor.Neutral));
+                        }
+                        else
+                        {
+                            m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                        }
+                        break;
+                }
             }
         }
         catch (Exception e)
@@ -121,12 +125,15 @@ public class Song : MonoBehaviour
             
         }
     }
-    private void PlayNote(GameObject note)
+    private void PlayNote(GameObject note, Cursor cursor)
     {
         var prefab = Instantiate(note);
         if (!prefab.TryGetComponent(out Animator animator)) return;
         
+        var spriteRenderer = note.GetComponentInChildren<SpriteRenderer>();
+        
         animator.speed = m_AnimationSpeed;
+        spriteRenderer.color = new Color(255f, 131f, 131f, 255f);
         animator.SetTrigger("playNote");
 
     }
@@ -139,49 +146,49 @@ public class Song : MonoBehaviour
             case 8:
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.twelveRingPrefab);
+                    PlayNote(rings.twelveRingPrefab, m_NoteMap[m_CurrNote].cursor);
                 });
                 break;
             case 9:
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.oneRingPrefab);
+                    PlayNote(rings.oneRingPrefab, m_NoteMap[m_CurrNote].cursor);
                 });
                 break;
             case 6:
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.threeRingPrefab);
+                    PlayNote(rings.threeRingPrefab, m_NoteMap[m_CurrNote].cursor);
                 });
                 break;
             case 3:
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.fourRingPrefab);
+                    PlayNote(rings.fourRingPrefab, m_NoteMap[m_CurrNote].cursor);
                 });
                 break;
             case 2:
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.sixRingPrefab);
+                    PlayNote(rings.sixRingPrefab, m_NoteMap[m_CurrNote].cursor);
                 });
                 break;
             case 1:
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.sevenRingPrefab);
+                    PlayNote(rings.sevenRingPrefab, m_NoteMap[m_CurrNote].cursor);
                 });
                 break;
             case 4:
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.nineRingPrefab);
+                    PlayNote(rings.nineRingPrefab, m_NoteMap[m_CurrNote].cursor);
                 });
                 break;
             case 7:
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.tenRingPrefab);
+                    PlayNote(rings.tenRingPrefab, m_NoteMap[m_CurrNote].cursor);
                 });
                 break;
         }

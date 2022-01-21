@@ -1944,7 +1944,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1299607603}
   - component: {fileID: 1299607602}
-  - component: {fileID: 1299607605}
   - component: {fileID: 1299607606}
   - component: {fileID: 1299607607}
   - component: {fileID: 1299607608}
@@ -1968,7 +1967,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1597958008}
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 1176321092}
   metronome2: {fileID: 1299607606}
   nineRing: {fileID: 0}
   notePrefab: {fileID: 5860039703636821708, guid: 2e84d811f57dc76409384b7b18a8e594, type: 3}
@@ -1988,20 +1987,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1299607605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1299607601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fde52c138f9dff64285c7a853b2a4888, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  x: 0
-  y: 0
 --- !u!114 &1299607606
 MonoBehaviour:
   m_ObjectHideFlags: 0
