@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6676227834444586721
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8014026272510457937}
+  - component: {fileID: 2315792160689358912}
+  m_Layer: 0
+  m_Name: RingObjectPrefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8014026272510457937
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6676227834444586721}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4618634, y: 0.36756915, z: -11.216249}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2315792160689358912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6676227834444586721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12199b986f9e94e49bdd5d418d0ff4c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nineRingPrefab: {fileID: 3607559905764568353, guid: 0803061253135a344b425e3c1b518b7f, type: 3}
+  threeRingPrefab: {fileID: 6685686243976765460, guid: 609d11e3eff03ba46b1af7b3b7c96410, type: 3}
+  fourRingPrefab: {fileID: 4088596381343212375, guid: a52c357b2cce48c4db17627266056dd8, type: 3}
+  sixRingPrefab: {fileID: 4125526002015032978, guid: ab5d76ef2de7b0d4f9b27459cdcaeb8c, type: 3}
+  sevenRingPrefab: {fileID: 1922547385266591825, guid: ececd94df588882489cf447bacb821a1, type: 3}
+  tenRingPrefab: {fileID: 1299650857874242524, guid: a6ade983280ad654f8264be9455ad517, type: 3}
+  twelveRingPrefab: {fileID: 87628076604656207, guid: cd07d150be7fc844d9ab5ea32724755e, type: 3}
+  oneRingPrefab: {fileID: 3325465359177155813, guid: 42893be60d77d5049a008fbfb12347e2, type: 3}

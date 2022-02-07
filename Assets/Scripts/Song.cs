@@ -1,11 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using System.IO;
 using System;
-
-public enum Ring {one, two, three}
 
 public class Song : MonoBehaviour
 {
@@ -16,57 +12,81 @@ public class Song : MonoBehaviour
     public float offset;
 
     public RingObject rings;
-    //public NoteArray[] rings3 = new NoteArray[100];
 
-    private float animationSpeed;
-    //public Animator nineRing, threeRing, fourRing, sixRing, sevenRing, eightRing, tenRing, twelveRing, oneRing; 
-    private int currNote = 0;
-    private List<int> noteMap = new List<int>();
-
-    //void OnGUI()
-    //{
-
-    //    // Starts a horizontal group
-    //    GUILayout.BeginHorizontal("box");
-
-    //    for(int i = 0; i < rings2.Length;  i++ ) {
-    //        rings2[i] = EditorGUILayout.IntField(rings2[i]);
-    //    }
-    //    GUILayout.EndHorizontal();
-    //}
-
-
-
+    private float m_AnimationSpeed;
+    private int m_CurrNote = 0;
+    //private readonly List<int> m_NoteMap = new List<int>();
+    private readonly List<Cursor> cursor = new List<Cursor>();
+    private readonly List<Note> m_NoteMap = new List<Note>();
     public void Awake()
     {
-        rings.setAnimationSpeed(60f / bpm * 2);
-        animationSpeed = 60f / bpm * 2;
-        LoadSong();
+        //rings.setAnimationSpeed(60f / bpm * 2);
+        m_AnimationSpeed = 60f / bpm;
+        //LoadSong();
     }
 
-    private void LoadSong()
+    public void LoadNotemap(string path)
     {
-        Debug.Log("laod song");
+        Debug.Log("load song");
         try
         {
-            if (File.Exists(notemapPath))
+            if (File.Exists(path))
             {
                 Debug.Log("Song Exists!");
             }
-
-            using (StreamReader sr = new StreamReader(notemapPath))
+            
+            using var sr = new StreamReader(path);
+            var line = sr.ReadLine();
+            while(line != null && (line.Contains("Artist") || line.Contains("Title") ||
+                                   line.Contains("Bpm") || line.Contains("Offset")))
             {
-                Debug.Log("peek: " + sr.Peek());
-                while (sr.Peek() >= 0)
+                line = sr.ReadLine();
+            }
+            
+            while (sr.Peek() >= 0)
+            { 
+                var noteDirection = Convert.ToChar(sr.Read());
+                if (noteDirection == ' ' || noteDirection == '\n' || noteDirection == '\r') continue;
+
+                if ((int) char.GetNumericValue(noteDirection) == 0)
                 {
-                    char temp = Convert.ToChar(sr.Read());
-                    if (temp != ' ' && temp != '\n' && temp != '\r')
-                    {
-                        Debug.Log(temp);
-                        noteMap.Add((int)char.GetNumericValue(temp));
-                    }
+                    m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                    continue;
+                }
+                if (sr.Peek() < 0)
+                {
+                    m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                    continue;
+                }
 
-
+                var cursorDirection = Convert.ToChar(sr.Read());
+                if (cursorDirection == ' ' && cursorDirection == '\n' && cursorDirection == '\r') continue;
+                
+                switch (cursorDirection)
+                {
+                    case 'L':
+                    case 'l':
+                        m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Left));
+                        break;
+                    case 'R':
+                    case 'r':
+                        m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Right));
+                        break;
+                    case 'N':
+                    case 'n':
+                        m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                        break;
+                    default:
+                        if (char.IsDigit(cursorDirection))
+                        {
+                            m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                            m_NoteMap.Add(new Note((int)char.GetNumericValue(cursorDirection), Cursor.Neutral));
+                        }
+                        else
+                        {
+                            m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                        }
+                        break;
                 }
             }
         }
@@ -75,74 +95,105 @@ public class Song : MonoBehaviour
             Debug.Log("The process failed: " + e.Message);
         }
     }
-    private void PlayNote(GameObject note)
+
+    public void LoadSongMetaData(string path)
     {
-        GameObject prefab = Instantiate(note);
-        if(prefab.TryGetComponent(out Animator animator))
+        foreach (var line in File.ReadAllLines(path))
         {
-            animator.speed = animationSpeed;
-            animator.SetTrigger("playNote");
+            if (line.Contains("Artist: "))
+            {
+                artist = line;
+                artist = artist.Replace("Artist: ", "");
+            }
+            if (line.Contains("Title: "))
+            {
+                title = line;
+                title = title.Replace("Title: ", "");
+            }
+            if (line.Contains("Bpm: "))
+            {
+                var bpmString = line;
+                bpmString = bpmString.Replace("Bpm: ", "");
+                bpm = int.Parse(bpmString);
+            }
+            if (line.Contains("Offset: "))
+            {
+                var offsetString = line;
+                offsetString = offsetString.Replace("Offset: ", "");
+                offset = float.Parse(offsetString);
+            }
+            
         }
+    }
+    private void PlayNote(GameObject note, Cursor cursor)
+    {
+        var prefab = Instantiate(note);
+        if (!prefab.TryGetComponent(out Animator animator)) return;
+        
+        var spriteRenderer = note.GetComponentInChildren<SpriteRenderer>();
+        
+        animator.speed = m_AnimationSpeed;
+        spriteRenderer.color = new Color(255f, 131f, 131f, 255f);
+        animator.SetTrigger("playNote");
 
     }
     public void NextNote()
     {
-        if(currNote < noteMap.Count)
+        if (m_CurrNote >= m_NoteMap.Count) return;
+        
+        switch (m_NoteMap[m_CurrNote].noteDirection)
         {
-            switch (noteMap[currNote])
-            {
-                case 8:
-                    UnityThread.executeInUpdate(() =>
-                    {
-                        PlayNote(rings.twelveRingPrefab);
-                    });
-                    break;
-                case 9:
-                    UnityThread.executeInUpdate(() =>
-                    {
-                        PlayNote(rings.oneRingPrefab);
-                    });
-                    break;
-                case 6:
-                    UnityThread.executeInUpdate(() =>
-                    {
-                        PlayNote(rings.threeRingPrefab);
-                    });
-                    break;
-                case 3:
-                    UnityThread.executeInUpdate(() =>
-                    {
-                        PlayNote(rings.fourRingPrefab);
-                    });
-                    break;
-                case 2:
-                    UnityThread.executeInUpdate(() =>
-                    {
-                        PlayNote(rings.sixRingPrefab);
-                    });
-                    break;
-                case 1:
-                    UnityThread.executeInUpdate(() =>
-                    {
-                        PlayNote(rings.sevenRingPrefab);
-                    });
-                    break;
-                case 4:
-                    UnityThread.executeInUpdate(() =>
-                    {
-                        PlayNote(rings.nineRingPrefab);
-                    });
-                    break;
-                case 7:
-                    UnityThread.executeInUpdate(() =>
-                    {
-                        PlayNote(rings.tenRingPrefab);
-                    });
-                    break;
-            }
-
-            currNote++;
+            case 8:
+                UnityThread.executeInUpdate(() =>
+                {
+                    PlayNote(rings.twelveRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                });
+                break;
+            case 9:
+                UnityThread.executeInUpdate(() =>
+                {
+                    PlayNote(rings.oneRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                });
+                break;
+            case 6:
+                UnityThread.executeInUpdate(() =>
+                {
+                    PlayNote(rings.threeRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                });
+                break;
+            case 3:
+                UnityThread.executeInUpdate(() =>
+                {
+                    PlayNote(rings.fourRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                });
+                break;
+            case 2:
+                UnityThread.executeInUpdate(() =>
+                {
+                    PlayNote(rings.sixRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                });
+                break;
+            case 1:
+                UnityThread.executeInUpdate(() =>
+                {
+                    PlayNote(rings.sevenRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                });
+                break;
+            case 4:
+                UnityThread.executeInUpdate(() =>
+                {
+                    PlayNote(rings.nineRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                });
+                break;
+            case 7:
+                UnityThread.executeInUpdate(() =>
+                {
+                    PlayNote(rings.tenRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                });
+                break;
         }
+
+        m_CurrNote++;
         //if (currNote == 0)
         //{
         //    UnityThread.executeInUpdate(() =>

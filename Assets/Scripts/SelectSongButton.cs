@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SongSelector : ButtonHandler, IButtonAction
+public class SelectSongButton : ButtonHandler, IButtonAction
 {
     
     //public GameObject chooseASong;
@@ -14,6 +14,10 @@ public class SongSelector : ButtonHandler, IButtonAction
     private void Awake()
     {
         buttonAction = this;
+        chooseASong = gameObject.transform.parent.transform.parent.gameObject; // jank af but im lazy rn
+        startSongButton = GameObject.Find("Canvas");
+        startSongButton = startSongButton.transform.Find("Start Button").gameObject; // jank af but liberating after work to write messy code
+        songPlayer = GameObject.Find("SCRIPTS").GetComponent<SongPlayer>();
     }
     void IButtonAction.ButtonAction()
     {

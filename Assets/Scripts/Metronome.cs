@@ -26,17 +26,19 @@ public class Metronome : MonoBehaviour
     {
         UnityThread.initUnityThread();
     }
+    
+    // this sets running to true which enables the OnAudioFilterRead loop
     public void Initialize(Song _song)
     {
         accent = signatureHi;
-        double startTick = AudioSettings.dspTime;
+        var startTick = AudioSettings.dspTime;
         sampleRate = AudioSettings.outputSampleRate;
         nextTick = startTick * sampleRate;
-        running = true;
         audioSource.enabled = true;
         song = _song;
         bpm = song.bpm * 4;
         offset = song.offset;
+        running = true;
         
         Debug.Log("startTick: " + startTick);
         Debug.Log("sampleRate: " + sampleRate);
@@ -48,14 +50,14 @@ public class Metronome : MonoBehaviour
         if (!running)
             return;
 
-        double samplesPerTick = sampleRate * 60.0F / bpm * 4.0F / signatureLo;
-        double sample = AudioSettings.dspTime * sampleRate;
-        int dataLen = data.Length / channels;
-        int n = 0;
+        var samplesPerTick = sampleRate * 60.0F / bpm * 4.0F / signatureLo;
+        var sample = AudioSettings.dspTime * sampleRate;
+        var dataLen = data.Length / channels;
+        var n = 0;
         while (n < dataLen)
         {
-            float x = gain * amp * Mathf.Sin(phase);
-            int i = 0;
+            var x = gain * amp * Mathf.Sin(phase);
+            var i = 0;
             while (i < channels)
             {
                 data[n * channels + i] += x;
