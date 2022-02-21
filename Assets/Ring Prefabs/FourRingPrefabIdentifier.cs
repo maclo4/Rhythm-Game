@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FourRingPrefabIdentifier : MonoBehaviour, IPrefabIdentifier
 {
+    
     public void EnterNoteAcceptedZone()
     {
         var FourRing = GameObject.Find("430 Ring");

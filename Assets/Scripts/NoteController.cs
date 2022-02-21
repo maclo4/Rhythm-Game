@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,9 @@ public class NoteController : MonoBehaviour
     private EdgeCollider2D edgeCollider;
     private SpriteRenderer spriteRenderer;
     private AudioSource clickAudioSource;
-    bool noteAccepted = false;
-    //public AudioClip click;
+    private bool noteAccepted;
+    private byte missedNoteCounter = 0;
+    public Cursor cursor;
     private void Awake()
     {
         edgeCollider = gameObject.GetComponent<EdgeCollider2D>();
@@ -17,7 +19,6 @@ public class NoteController : MonoBehaviour
     }
     public void StartCheckingCollision()
     {
-        //Application.targetFrameRate = 300;
         edgeCollider.enabled = true;
     }
 
@@ -30,7 +31,7 @@ public class NoteController : MonoBehaviour
         noteAccepted = false;
     }
 
-    public void OnTriggerEnter2D()
+    public void OnTriggerEnter2D(Collider2D other)
     {
         //clickAudioSource.Play();
 
@@ -38,28 +39,44 @@ public class NoteController : MonoBehaviour
         Debug.Log("ayy collision works");
         
 
-        if(noteAccepted == true)
+        if(noteAccepted)
         {
-            clickAudioSource.PlayOneShot(clickAudioSource.clip, 1);
-            spriteRenderer.color = new Color32(0, 255, 35, 255);
-            Debug.Log("ayy note accepted");
+            switch (cursor)
+            {
+                case Cursor.Right when other.CompareTag("Right Cursor"):
+                    clickAudioSource.PlayOneShot(clickAudioSource.clip, .5f);
+                    spriteRenderer.color = new Color32(0, 255, 35, 255);
+                    Debug.Log("ayy note accepted");
+                    break;
+                case Cursor.Left when other.CompareTag("Left Cursor"):
+                    clickAudioSource.PlayOneShot(clickAudioSource.clip, .5f);
+                    spriteRenderer.color = new Color32(0, 255, 35, 255);
+                    Debug.Log("ayy note accepted");
+                    break;
+                case Cursor.Neutral:
+                    clickAudioSource.PlayOneShot(clickAudioSource.clip, .5f);
+                    spriteRenderer.color = new Color32(0, 255, 35, 255);
+                    Debug.Log("ayy note accepted");
+                    break;
+                default:
+                    missedNoteCounter++;
+                    //clickAudioSource.PlayOneShot(clickAudioSource.clip, .7f);
+                    spriteRenderer.color = new Color32(255, 0, 0, 255);
+                    Debug.Log("note denied :(");
+                    break;
+            }
         }
         else
         {
-
-            clickAudioSource.PlayOneShot(clickAudioSource.clip, .7f);
+            missedNoteCounter++;
+            //clickAudioSource.PlayOneShot(clickAudioSource.clip, .7f);
             spriteRenderer.color = new Color32(255, 0, 0, 255);
             Debug.Log("note denied :(");
         }
     }
 
-    //public void OnTriggerStay2D(Collider2D collision)
-    //{
-    //    spriteRenderer.color = new Color32(255, 0, 0, 255);
-    //}
-
-    public void OnTriggerExit2D()
+    public void OnTriggerExit2D(Collider2D other)
     {
-        spriteRenderer.color = new Color32(255, 131, 131, 255);
+        spriteRenderer.color = new Color32(0, 117, 255, 255);
     }
 }

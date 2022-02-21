@@ -128,67 +128,89 @@ public class Song : MonoBehaviour
     private void PlayNote(GameObject note, Cursor cursor)
     {
         var prefab = Instantiate(note);
+        
         if (!prefab.TryGetComponent(out Animator animator)) return;
-        
-        var spriteRenderer = note.GetComponentInChildren<SpriteRenderer>();
-        
         animator.speed = m_AnimationSpeed;
+        
+        var spriteRenderer = prefab.GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.color = new Color(255f, 131f, 131f, 255f);
+
+        /*if (!prefab.TryGetComponent(out NoteController noteController)) return;
+        noteController.cursor = cursor;*/
+        
+        if (cursor == Cursor.Left)
+        {
+            spriteRenderer.material.color = new Color(1f, 131f / 255, 131f / 255, 1f);
+        }
+        else if (cursor == Cursor.Right)
+        {
+            spriteRenderer.material.color = new Color(0f, 1f, 1f, 1f);
+        }
+
         animator.SetTrigger("playNote");
 
     }
     public void NextNote()
     {
         if (m_CurrNote >= m_NoteMap.Count) return;
-        
+
+        Cursor tempCursor;
         switch (m_NoteMap[m_CurrNote].noteDirection)
         {
             case 8:
+                tempCursor = m_NoteMap[m_CurrNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.twelveRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                    PlayNote(rings.twelveRingPrefab, tempCursor);
                 });
                 break;
             case 9:
+                tempCursor = m_NoteMap[m_CurrNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.oneRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                    PlayNote(rings.oneRingPrefab, tempCursor);
                 });
                 break;
             case 6:
+                tempCursor = m_NoteMap[m_CurrNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.threeRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                    PlayNote(rings.threeRingPrefab, tempCursor);
                 });
                 break;
             case 3:
+                tempCursor = m_NoteMap[m_CurrNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.fourRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                    PlayNote(rings.fourRingPrefab, tempCursor);
                 });
                 break;
             case 2:
+                tempCursor = m_NoteMap[m_CurrNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.sixRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                    PlayNote(rings.sixRingPrefab, tempCursor);
                 });
                 break;
             case 1:
+                tempCursor = m_NoteMap[m_CurrNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.sevenRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                    PlayNote(rings.sevenRingPrefab, tempCursor);
                 });
                 break;
             case 4:
+                tempCursor = m_NoteMap[m_CurrNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.nineRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                    PlayNote(rings.nineRingPrefab, tempCursor);
                 });
                 break;
             case 7:
+                tempCursor = m_NoteMap[m_CurrNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
-                    PlayNote(rings.tenRingPrefab, m_NoteMap[m_CurrNote].cursor);
+                    PlayNote(rings.tenRingPrefab, tempCursor);
                 });
                 break;
         }
