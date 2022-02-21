@@ -6,18 +6,35 @@ public class TenRingPrefabIdentifier : MonoBehaviour, IPrefabIdentifier
 {
     public void EnterNoteAcceptedZone()
     {
-        var TenRing = GameObject.Find("10 Ring");
-        if (TenRing.TryGetComponent(out NoteController noteController))
+        var ring = GameObject.Find("10 Ring");
+        if (ring.TryGetComponent(out NoteController noteController))
         {
             noteController.EnterAcceptanceZone();
         }
     }
     public void ExitNoteAcceptedZone()
     {
-        var TenRing = GameObject.Find("10 Ring");
-        if (TenRing.TryGetComponent(out NoteController noteController))
+        var ring = GameObject.Find("10 Ring");
+        if (ring.TryGetComponent(out NoteController noteController))
         {
             noteController.ExitAcceptanceZone();
+        }
+    }
+    
+    public void EnterLeftNoteAcceptedZone()
+    {
+        var ring = GameObject.Find("10 Ring");
+        if (ring.TryGetComponent(out NoteController noteController))
+        {
+            noteController.EnterLeftAcceptanceZone();
+        }
+    }
+    public void EnterRightNoteAcceptedZone()
+    {
+        var ring = GameObject.Find("10 Ring");
+        if (ring.TryGetComponent(out NoteController noteController))
+        {
+            noteController.EnterRightAcceptanceZone();
         }
     }
 }

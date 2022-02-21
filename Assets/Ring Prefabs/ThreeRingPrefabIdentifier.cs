@@ -6,18 +6,35 @@ public class ThreeRingPrefabIdentifier : MonoBehaviour, IPrefabIdentifier
 {
     public void EnterNoteAcceptedZone()
     {
-        var threeRing = GameObject.Find("3 Ring");
-        if (threeRing.TryGetComponent(out NoteController noteController))
+        var ring = GameObject.Find("3 Ring");
+        if (ring.TryGetComponent(out NoteController noteController))
         {
             noteController.EnterAcceptanceZone();
         }
     }
     public void ExitNoteAcceptedZone()
     {
-        var threeRing = GameObject.Find("3 Ring");
-        if (threeRing.TryGetComponent(out NoteController noteController))
+        var ring = GameObject.Find("3 Ring");
+        if (ring.TryGetComponent(out NoteController noteController))
         {
             noteController.ExitAcceptanceZone();
+        }
+    }
+    
+    public void EnterLeftNoteAcceptedZone()
+    {
+        var ring = GameObject.Find("3 Ring");
+        if (ring.TryGetComponent(out NoteController noteController))
+        {
+            noteController.EnterLeftAcceptanceZone();
+        }
+    }
+    public void EnterRightNoteAcceptedZone()
+    {
+        var ring = GameObject.Find("3 Ring");
+        if (ring.TryGetComponent(out NoteController noteController))
+        {
+            noteController.EnterRightAcceptanceZone();
         }
     }
 }

@@ -6,5 +6,7 @@ public interface IPrefabIdentifier
 {
     public void EnterNoteAcceptedZone();
     public void ExitNoteAcceptedZone();
+    void EnterLeftNoteAcceptedZone();
+    void EnterRightNoteAcceptedZone();
 }
 

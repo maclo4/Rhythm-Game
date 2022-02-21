@@ -6,18 +6,35 @@ public class OneRingPrefabIdentifier : MonoBehaviour, IPrefabIdentifier
 {
     public void EnterNoteAcceptedZone()
     {
-        var OneRing = GameObject.Find("130 Ring");
-        if (OneRing.TryGetComponent(out NoteController noteController))
+        var ring = GameObject.Find("130 Ring");
+        if (ring.TryGetComponent(out NoteController noteController))
         {
             noteController.EnterAcceptanceZone();
         }
     }
     public void ExitNoteAcceptedZone()
     {
-        var OneRing = GameObject.Find("130 Ring");
-        if (OneRing.TryGetComponent(out NoteController noteController))
+        var ring = GameObject.Find("130 Ring");
+        if (ring.TryGetComponent(out NoteController noteController))
         {
             noteController.ExitAcceptanceZone();
+        }
+    }
+    
+    public void EnterLeftNoteAcceptedZone()
+    {
+        var ring = GameObject.Find("130 Ring");
+        if (ring.TryGetComponent(out NoteController noteController))
+        {
+            noteController.EnterLeftAcceptanceZone();
+        }
+    }
+    public void EnterRightNoteAcceptedZone()
+    {
+        var ring = GameObject.Find("130 Ring");
+        if (ring.TryGetComponent(out NoteController noteController))
+        {
+            noteController.EnterRightAcceptanceZone();
         }
     }
 }

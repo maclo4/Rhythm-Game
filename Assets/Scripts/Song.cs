@@ -13,15 +13,19 @@ public class Song : MonoBehaviour
 
     public RingObject rings;
 
-    private float m_AnimationSpeed;
-    private int m_CurrNote = 0;
+    private float animationSpeed;
+    private int currNote = 0;
     //private readonly List<int> m_NoteMap = new List<int>();
     private readonly List<Cursor> cursor = new List<Cursor>();
-    private readonly List<Note> m_NoteMap = new List<Note>();
+    private readonly List<Note> noteMap = new List<Note>();
+    private static readonly int PlayNote1 = Animator.StringToHash("playNote");
+    private static readonly int PlayLeftNote = Animator.StringToHash("playLeftNote");
+    private static readonly int PlayRightNote = Animator.StringToHash("playRightNote");
+
     public void Awake()
     {
         //rings.setAnimationSpeed(60f / bpm * 2);
-        m_AnimationSpeed = 60f / bpm;
+        animationSpeed = 60f / bpm;
         //LoadSong();
     }
 
@@ -50,12 +54,12 @@ public class Song : MonoBehaviour
 
                 if ((int) char.GetNumericValue(noteDirection) == 0)
                 {
-                    m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                    noteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
                     continue;
                 }
                 if (sr.Peek() < 0)
                 {
-                    m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                    noteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
                     continue;
                 }
 
@@ -66,25 +70,25 @@ public class Song : MonoBehaviour
                 {
                     case 'L':
                     case 'l':
-                        m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Left));
+                        noteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Left));
                         break;
                     case 'R':
                     case 'r':
-                        m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Right));
+                        noteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Right));
                         break;
                     case 'N':
                     case 'n':
-                        m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                        noteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
                         break;
                     default:
                         if (char.IsDigit(cursorDirection))
                         {
-                            m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
-                            m_NoteMap.Add(new Note((int)char.GetNumericValue(cursorDirection), Cursor.Neutral));
+                            noteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                            noteMap.Add(new Note((int)char.GetNumericValue(cursorDirection), Cursor.Neutral));
                         }
                         else
                         {
-                            m_NoteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
+                            noteMap.Add(new Note((int)char.GetNumericValue(noteDirection), Cursor.Neutral));
                         }
                         break;
                 }
@@ -125,89 +129,96 @@ public class Song : MonoBehaviour
             
         }
     }
-    private void PlayNote(GameObject note, Cursor cursor)
+    private void PlayNote(GameObject note, Cursor cursorType)
     {
         var prefab = Instantiate(note);
         
         if (!prefab.TryGetComponent(out Animator animator)) return;
-        animator.speed = m_AnimationSpeed;
+        animator.speed = animationSpeed;
         
         var spriteRenderer = prefab.GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.color = new Color(255f, 131f, 131f, 255f);
 
-        /*if (!prefab.TryGetComponent(out NoteController noteController)) return;
-        noteController.cursor = cursor;*/
+        //if (!prefab.TryGetComponent(out NoteController noteController)) return;
+        //noteController.cursor = cursorType;
         
-        if (cursor == Cursor.Left)
+        if (cursorType == Cursor.Left)
         {
             spriteRenderer.material.color = new Color(1f, 131f / 255, 131f / 255, 1f);
+            animator.SetTrigger(PlayLeftNote);
         }
-        else if (cursor == Cursor.Right)
+        else if (cursorType == Cursor.Right)
         {
             spriteRenderer.material.color = new Color(0f, 1f, 1f, 1f);
+            animator.SetTrigger(PlayRightNote);
+        }
+        else if (cursorType == Cursor.Neutral)
+        {
+            spriteRenderer.material.color = new Color(0f, 1f, 1f, 1f);
+            animator.SetTrigger(PlayNote1);
         }
 
-        animator.SetTrigger("playNote");
+        //animator.SetTrigger(PlayNote1);
 
     }
     public void NextNote()
     {
-        if (m_CurrNote >= m_NoteMap.Count) return;
+        if (currNote >= noteMap.Count) return;
 
         Cursor tempCursor;
-        switch (m_NoteMap[m_CurrNote].noteDirection)
+        switch (noteMap[currNote].noteDirection)
         {
             case 8:
-                tempCursor = m_NoteMap[m_CurrNote].cursor;
+                tempCursor = noteMap[currNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
                     PlayNote(rings.twelveRingPrefab, tempCursor);
                 });
                 break;
             case 9:
-                tempCursor = m_NoteMap[m_CurrNote].cursor;
+                tempCursor = noteMap[currNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
                     PlayNote(rings.oneRingPrefab, tempCursor);
                 });
                 break;
             case 6:
-                tempCursor = m_NoteMap[m_CurrNote].cursor;
+                tempCursor = noteMap[currNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
                     PlayNote(rings.threeRingPrefab, tempCursor);
                 });
                 break;
             case 3:
-                tempCursor = m_NoteMap[m_CurrNote].cursor;
+                tempCursor = noteMap[currNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
                     PlayNote(rings.fourRingPrefab, tempCursor);
                 });
                 break;
             case 2:
-                tempCursor = m_NoteMap[m_CurrNote].cursor;
+                tempCursor = noteMap[currNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
                     PlayNote(rings.sixRingPrefab, tempCursor);
                 });
                 break;
             case 1:
-                tempCursor = m_NoteMap[m_CurrNote].cursor;
+                tempCursor = noteMap[currNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
                     PlayNote(rings.sevenRingPrefab, tempCursor);
                 });
                 break;
             case 4:
-                tempCursor = m_NoteMap[m_CurrNote].cursor;
+                tempCursor = noteMap[currNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
                     PlayNote(rings.nineRingPrefab, tempCursor);
                 });
                 break;
             case 7:
-                tempCursor = m_NoteMap[m_CurrNote].cursor;
+                tempCursor = noteMap[currNote].cursor;
                 UnityThread.executeInUpdate(() =>
                 {
                     PlayNote(rings.tenRingPrefab, tempCursor);
@@ -215,7 +226,7 @@ public class Song : MonoBehaviour
                 break;
         }
 
-        m_CurrNote++;
+        currNote++;
         //if (currNote == 0)
         //{
         //    UnityThread.executeInUpdate(() =>
